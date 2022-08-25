@@ -108,7 +108,6 @@ Components:
     },
   profileImg: {
       type: String,
-      required: true,
       default: 'https://res.cloudinary.com/dvzekm9zq/image/upload/v1660147231/cards/avatar_bpem8o.png'
     },
   field: { 
@@ -130,13 +129,13 @@ Components:
 ```
 
 
-**Requests model**
+**Result model**
 
 ```javascript
   {
     appName: { type: String },
     userInput: { type: String },
-    apiReturn: { type: String }
+    result: { type: String }
   }
 
 ```
@@ -149,15 +148,14 @@ Components:
 | ----------- | ---------------------- | ---------------------------- | -------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------- |
 | POST        | `/auth/signup`         | {name, email, password, field, profileImg}      | 201            | 404          | Checks if fields not empty (422) and user not exists (409), then create user with encrypted password, and store user in session |
 | POST        | `/auth/login`          | {email, password}         | 200            | 401          | Checks if fields not empty (422), if user exists (404), and if password matches (404), then stores user in session              |
-| GET         | `/api/app`             |                              |                | 400          | Show all apps                                                                                                            |
-| GET         | `/api/app/:id`         |                              |                |              | Show specific app                                                                                                        |
-| POST        | `/api/app`             | { model, prompt, temperature, max_tokens, top_p, frequency_penalty, presence_penalty }       | 201            | 400          | Create and save a new app                                                                                                |
-| GET         | `/api/profile/:id`     |                              |                |              | show specific profile                                                                                                            |
-| POST        | `/api/profile`         | { name, profileImg }  | 200            | 404          | add profile                                                                                                                      |
-| PUT         | `/api/profile/:id`     | { name, profileImg }                | 201            | 400          | edit profile                                                                                                                     |
-| DELETE      | `/api/profile/:id`     |                              | 200            | 400          | delete profile                                                                                                                   |
-| GET         | `/api/:appId/:results` |                              | 201            | 400          | show specific app results                                                                                                       |
-| POST        | `/api/app/:id/results` | {appName, results } |                |              | add results                                                                                                                     |
+| GET         | `/profile/:id`     |                              |                |              | show specific profile                                                                                                            |
+| PUT         | `/profile/:id`     | { name, profileImg }                | 201            | 400          | edit profile                                                                                                                     |
+| DELETE      | `/profile/:id`     |                              | 200            | 400          | delete profile                                                                                                                   |
+| GET         | `/:app`             |                              |                | 400          | Show all apps                                                                                                            |
+| POST        | `/:app`             | { model, prompt, temperature, max_tokens, top_p, frequency_penalty, presence_penalty }       | 201            | 400          | Create and save a new app                                                                                                |
+| GET         | `/:app/:id`         |                              |                |              | Show specific app                                                                                                        |
+| GET         | `/:app/:id/:results` |                              | 201            | 400          | show specific app results                                                                                                       |
+| POST        | `/:app/:id/:results` | {appName, results } |                |              | add results                                                                                                                     |
 
 <br>
 
