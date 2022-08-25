@@ -1,9 +1,9 @@
 const { Schema, model } = require('mongoose');
 
-const requestsSchema = new Schema(
+const resultsSchema = new Schema(
     {
         userInput: { type: String },
-        apiReturn: { type: String },
+        results: { type: String },
         appName: { type: String },
     },
     {
@@ -11,6 +11,6 @@ const requestsSchema = new Schema(
     }
 );
 
-const Request = model('Request', requestsSchema);
+const Result = model('Result', resultsSchema);
 
-module.exports = Request;
+module.exports = Result;

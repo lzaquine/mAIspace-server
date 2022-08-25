@@ -18,12 +18,10 @@ const userSchema = new Schema(
     },
     profileImg: {
         type: String,
-        required: true,
         default: 'https://res.cloudinary.com/dvzekm9zq/image/upload/v1660147231/cards/avatar_bpem8o.png'
     },
     field: { 
       type: String, 
-      required: true,
       enum: ['Fun', 'Business', 'Programmer', 'Teacher']},
       createdResults: [{ type: Schema.Types.ObjectId, ref:'App' }]
   },

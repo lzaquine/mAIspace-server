@@ -14,7 +14,6 @@ const User = require("../models/User.model");
 const { isAuthenticated } = require("../middleware/jwt.middleware");
 
 router.get("/verify", isAuthenticated, (req, res) => {
-  console.log('the token: (or not)', req.payload)
 
   res.status(200).json(req.payload);
 });
@@ -76,7 +75,6 @@ router.post("/signup", (req, res) => {
       })
       .then((user) => {
         // Bind the user to the session object
-        req.session.user = user;
         res.status(201).json(user);
       })
       .catch((error) => {
@@ -112,7 +110,7 @@ router.post("/login", (req, res, next) => {
   }
 
   // Search the database for a user with the username submitted in the form
-  User.findOne({ username })
+  User.findOne({ email })
     .then((user) => {
       // If the user isn't found, send the message that user provided wrong credentials
       if (!user) {
