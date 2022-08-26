@@ -22,8 +22,9 @@ const userSchema = new Schema(
     },
     field: { 
       type: String, 
-      enum: ['Fun', 'Business', 'Programmer', 'Teacher']},
-      createdResults: [{ type: Schema.Types.ObjectId, ref:'App' }]
+      enum: ['Fun', 'Business', 'Programmer', 'Teacher']
+    },
+    createdResults: [{ type: Schema.Types.ObjectId, ref:'App' }]
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
