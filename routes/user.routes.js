@@ -1,16 +1,14 @@
 const router = require("express").Router();
 const User = require("../models/User.model");
 
-
-router.get("/profile", (req, res, next) => {
-  const { id } = req.payload;
-  User.findById(id)
+router.get("/profile/:id", (req, res, next) => {
+  const { _id } = req.payload;
+  User.findById(_id)
     .then((user) => {
       res.status(200).json(user);
     })
     .catch((err) => res.json(err));
 });
-
 
 router.put("/profile/edit/:id", (req, res, next) => {
   const { id } = req.params;
@@ -21,8 +19,6 @@ router.put("/profile/edit/:id", (req, res, next) => {
     .catch((err) => res.json(err));
 });
 
-
-// Do I really need this route?
 router.delete('/profile/:id', (req, res, next) => {
   const { id } = req.params;
 

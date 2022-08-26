@@ -84,7 +84,7 @@ router.post("/signup", (req, res) => {
         if (error.code === 11000) {
           return res.status(400).json({
             errorMessage:
-              "Email needs to be unique. This email is already in use.",
+              "Email needs to be unique. Please choose another email.",
           });
         }
         return res.status(500).json({ errorMessage: error.message });
