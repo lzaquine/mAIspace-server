@@ -58,31 +58,6 @@ Components:
 
 <br>
 
-## Services
-
-- **Auth Service**
-
-  - `authService` :
-    - `.login(user)`
-    - `.signup(user)`
-    - `.logout()`
-    - `.validate()`
-
-- **User Service**
-
-  - `userService` :
-    - `.updateCurrentUser(id, userData)`
-    - `.getCurrentUser()`
-
-- **App Service**
-
-  - `App` :
-    - `.addApp(AppData)`
-    - `.getApp()`
-    - `.getOneApp(id)`
-
-<br>
-
 # Server / Backend
 
 ## Models:
@@ -149,7 +124,7 @@ Components:
 | POST        | `/auth/signup`         | {name, email, password, field, profileImg}      | 201            | 404          | Checks if fields not empty (422) and user not exists (409), then create user with encrypted password, and store user in session |
 | POST        | `/auth/login`          | {email, password}         | 200            | 401          | Checks if fields not empty (422), if user exists (404), and if password matches (404), then stores user in session              |
 | GET         | `/profile/:id`     |                              |                |              | show specific profile                                                                                                            |
-| PUT         | `/profile/:id`     | { name, profileImg }                | 201            | 400          | edit profile                                                                                                                     |
+| PUT         | `/profile/edit/:id`     | { name, profileImg }                | 201            | 400          | edit profile                                                                                                                     |
 | DELETE      | `/profile/:id`     |                              | 200            | 400          | delete profile                                                                                                                   |
 | GET         | `/:app`             |                              |                | 400          | Show all apps                                                                                                            |
 | POST        | `/:app`             | { model, prompt, temperature, max_tokens, top_p, frequency_penalty, presence_penalty }       | 201            | 400          | Create and save a new app                                                                                                |
