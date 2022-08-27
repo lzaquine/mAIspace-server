@@ -1,35 +1,56 @@
 const router = require("express").Router();
 const App = require("../models/App.model");
-const User = require("../models/User.model");
 const axios = require("axios");
 
 let openAi = axios.create({
-    baseURL: 'https://api.openai.com/v1/completions',
-    headers: {'Authorization': 'Bearer ' + process.env.OPEN_AI_TOKEN}
+  baseURL: "https://api.openai.com/v1/completions",
+  headers: { Authorization: "Bearer " + process.env.OPEN_AI_TOKEN },
 });
 
 router.get("/app", (req, res, next) => {
-  App.find()
+  App.find() 
     .then((apps) => res.status(200).json(apps))
     .catch((err) => res.json(err));
 });
 
 router.post("/app", (req, res, next) => {
-    const { appName, appDescription, model, prompt, temperature, max_tokens, top_p, frequency_penalty, presence_penalty } = req.body;
-    
-    App.create({ appName, appDescription, model, prompt, temperature, max_tokens, top_p, frequency_penalty, presence_penalty })
-        .then((app) => res.status(200).json(app))
-        .catch((err) => res.json(err));
+  const {
+    appName,
+    appDescription,
+    model,
+    prompt,
+    temperature,
+    max_tokens,
+    top_p,
+    frequency_penalty,
+    presence_penalty,
+  } = req.body;
+
+  App.create({
+    appName,
+    appDescription,
+    model,
+    prompt,
+    temperature,
+    max_tokens,
+    top_p,
+    frequency_penalty,
+    presence_penalty,
+  })
+    .then((app) => res.status(200).json(app))
+    .catch((err) => res.json(err));
 });
 
 router.get("/app/:appId", (req, res, next) => {
-    const { appId } = req.params;
-    
-    App.findById(appId)
-        .then((app) => res.status(200).json(app))
-        .catch((err) => res.json(err));
-});
+  const { appId } = req.params;
+  let prompt = "";
+  let appName = "";
+  let appDescription = "";
 
+  App.findById(appId)
+    .then((app) => res.status(200).json(app))
+    .catch((err) => res.json(err));
+});
 
 /* router.get("/app/:appId/:results", (req, res, next) => {
     const { appId, results } = req.params;
@@ -58,7 +79,6 @@ router.post("/app/:appId/:results", (req, res, next) => {
 }) */
 
 module.exports = router;
-
 
 /* App.findOne(appName)
         .then((app) => {
