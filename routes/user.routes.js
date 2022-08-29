@@ -19,7 +19,7 @@ router.put("/profile/edit/:id", (req, res, next) => {
     .catch((err) => res.json(err));
 });
 
-router.delete('/profile/:id', (req, res, next) => {
+router.delete('/profile/edit/delete/:id', (req, res, next) => {
   const { id } = req.params;
 
   User.findByIdAndDelete(id)
