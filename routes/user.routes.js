@@ -10,11 +10,11 @@ router.get("/profile/:id", (req, res, next) => {
     .catch((err) => res.json(err));
 });
 
-router.put("/profile/edit/:id", (req, res, next) => {
+router.put("/editprofile/:id", (req, res, next) => {
   const { id } = req.params;
-  const { name, profileImg } = req.body;
+  const { name, email, field } = req.body;
 
-  User.findByIdAndUpdate(id, {name, profileImg}, { new: true })
+  User.findByIdAndUpdate(id, {name, email, field}, { new: true })
     .then((response) => res.status(200).json(response))
     .catch((err) => res.json(err));
 });
