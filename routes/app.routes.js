@@ -1,10 +1,17 @@
 const router = require("express").Router();
 const App = require("../models/App.model");
 const axios = require("axios");
+const User = require("../models/User.model");
 
-let openAi = axios.create({
-  baseURL: "https://api.openai.com/v1/completions",
-  headers: { Authorization: "Bearer " + process.env.OPEN_AI_TOKEN },
+// ALL APPS
+router.post("/app", (req, res, next) => {
+  const { appName, appDescription } = req.body; 
+  App.create({
+    appName,
+    appDescription,
+  })
+    .then((response) => res.status(200).json(response))
+    .catch((err) => res.json(err));
 });
 
 router.get("/app", (req, res, next) => {
@@ -13,44 +20,47 @@ router.get("/app", (req, res, next) => {
     .catch((err) => res.json(err));
 });
 
-router.post("/app", (req, res, next) => {
-  const {
-    appName,
-    appDescription,
-    model,
-    prompt,
-    temperature,
-    max_tokens,
-    top_p,
-    frequency_penalty,
-    presence_penalty,
-  } = req.body;
+// ONE APP
 
-  App.create({
-    appName,
-    appDescription,
-    model,
-    prompt,
-    temperature,
-    max_tokens,
-    top_p,
-    frequency_penalty,
-    presence_penalty,
-  })
-    .then((app) => res.status(200).json(app))
+router.get("/app/:appName", (req, res, next) => {
+  const { appName } = req.params;
+
+  App.findOne({appName: appName})
+    .then((response) => res.status(200).json(response))
     .catch((err) => res.json(err));
 });
 
-router.get("/app/:appId", (req, res, next) => {
-  const { appId } = req.params;
-  let prompt = "";
-  let appName = "";
-  let appDescription = "";
+router.post("/app/:appName", (req, res, next) => {
+  const { appName } = req.params;
+  const { question } = req.body;
 
-  App.findById(appId)
-    .then((app) => res.status(200).json(app))
+  // fazer uma rota pra cada app, com o nome da app e outras infos, chamar api em cada uma delas.
+  //question/prompt 
+
+  App.findOne({ appName })
+    .then((response) => res.status(200).json(response))
     .catch((err) => res.json(err));
-});
+
+  let myPrompt = `
+  "Marv is a chatbot that reluctantly answers questions with sarcastic responses:\n\nYou: ${user.question}`
+
+  let body = {
+    prompt: myPrompt,
+    temperature: 1,
+    max_tokens: 200,
+  }
+
+  let openAi = axios.post(
+    `https://api.openai.com/v1/completions`,
+    body,
+    {
+      headers: { Authorization: `Bearer ${process.env.OPEN_AI_TOKEN}`, },
+    }
+  );
+
+  let answer = openAi.data.choices[0].text;
+}
+);
 
 /* router.get("/app/:appId/:results", (req, res, next) => {
     const { appId, results } = req.params;

@@ -4,12 +4,13 @@ const appSchema = new Schema(
     {
         appName: { type: String, },
         appDescription: { type: String, },
-        model: { 
+        /* model: { 
             type: String,
             default: "text-davinci-002"
-         },
-        prompt: { type: String, },
-        temperature: {
+         }, */
+        question: { type: String, },
+        answer: { type: String, },
+        /* temperature: {
             type: Number,
             default: 0.7,
             max: 1,
@@ -38,7 +39,7 @@ const appSchema = new Schema(
             default: 0.5,
             max: 1,
             min: 0
-        }
+        } */
     },
     {
         timestamps: true,
