@@ -51,6 +51,7 @@ router.post("/app/:appName", async (req, res, next) => {
       temperature: app.temperature,
       max_tokens: app.max_tokens,
     };
+    
     console.log(question);
     let openAi = await axios.post(
       `https://api.openai.com/v1/engines/text-davinci-002/completions`,
@@ -59,7 +60,9 @@ router.post("/app/:appName", async (req, res, next) => {
         headers: { Authorization: `Bearer ${process.env.OPEN_AI_TOKEN}` },
       }
     );
-    res.json(openAi.data.choices[0].text);
+    let answer = (openAi.data.choices[0].text)
+    res.json(answer);
+    console.log(answer);
   } catch (error) {
     console.log(error);
   }

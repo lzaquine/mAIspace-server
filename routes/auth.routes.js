@@ -93,7 +93,7 @@ router.post("/signup", (req, res) => {
 });
 
 router.post("/login", (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, field, name } = req.body;
 
   if (!email) {
     return res
@@ -123,10 +123,10 @@ router.post("/login", (req, res, next) => {
           return res.status(400).json({ errorMessage: "Wrong credentials." });
         }
         // Destructuring what we want from the user
-        const {_id, email} = user;
+        const {_id, email, field, name} = user;
         
         // Creating the payload with the properties we want to save on the token
-        const payload = {_id, email};
+        const payload = {_id, email, field, name};
 
         // Creating the token 
         const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
