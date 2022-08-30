@@ -8,21 +8,16 @@ const appSchema = new Schema(
             type: String,
             default: "text-davinci-002"
          }, */
-        question: { type: String, },
-        answer: { type: String, },
-        /* temperature: {
+/*         question: { type: String, }, */
+/*         answer: { type: String, }, */
+        temperature: {
             type: Number,
-            default: 0.7,
-            max: 1,
-            min: 0
         },
         max_tokens: {
             type: Number,
-            default: 100,
-            max: 500,
-            min: 0
         },
-        top_p: {
+        prompt: { type: String }
+        /* top_p: {
             type: Number,
             default: 0.95,
             max: 1,

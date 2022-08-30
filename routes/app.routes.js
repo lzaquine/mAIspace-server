@@ -3,19 +3,23 @@ const App = require("../models/App.model");
 const axios = require("axios");
 const User = require("../models/User.model");
 
+
 // ALL APPS
 router.post("/app", (req, res, next) => {
-  const { appName, appDescription } = req.body; 
+  const { appName, appDescription, prompt, temperature, max_tokens } = req.body;
   App.create({
     appName,
     appDescription,
+    prompt,
+    temperature,
+    max_tokens,
   })
     .then((response) => res.status(200).json(response))
     .catch((err) => res.json(err));
 });
 
 router.get("/app", (req, res, next) => {
-  App.find() 
+  App.find()
     .then((apps) => res.status(200).json(apps))
     .catch((err) => res.json(err));
 });
@@ -25,42 +29,41 @@ router.get("/app", (req, res, next) => {
 router.get("/app/:appName", (req, res, next) => {
   const { appName } = req.params;
 
-  App.findOne({appName: appName})
+  App.findOne({ appName: appName })
     .then((response) => res.status(200).json(response))
     .catch((err) => res.json(err));
 });
 
-router.post("/app/:appName", (req, res, next) => {
+// CALL API
+
+router.post("/app/:appName", async (req, res, next) => {
   const { appName } = req.params;
   const { question } = req.body;
 
-  // fazer uma rota pra cada app, com o nome da app e outras infos, chamar api em cada uma delas.
-  //question/prompt 
+  let app = await App.findOne({ appName });
 
-  App.findOne({ appName })
-    .then((response) => res.status(200).json(response))
-    .catch((err) => res.json(err));
+  try {
+    let myPrompt = `
+  "${app.prompt} ${question}`;
 
-  let myPrompt = `
-  "Marv is a chatbot that reluctantly answers questions with sarcastic responses:\n\nYou: ${user.question}`
-
-  let body = {
-    prompt: myPrompt,
-    temperature: 1,
-    max_tokens: 200,
+    let body = {
+      prompt: myPrompt,
+      temperature: app.temperature,
+      max_tokens: app.max_tokens,
+    };
+    console.log(question);
+    let openAi = await axios.post(
+      `https://api.openai.com/v1/engines/text-davinci-002/completions`,
+      body,
+      {
+        headers: { Authorization: `Bearer ${process.env.OPEN_AI_TOKEN}` },
+      }
+    );
+    res.json(openAi.data.choices[0].text);
+  } catch (error) {
+    console.log(error);
   }
-
-  let openAi = axios.post(
-    `https://api.openai.com/v1/completions`,
-    body,
-    {
-      headers: { Authorization: `Bearer ${process.env.OPEN_AI_TOKEN}`, },
-    }
-  );
-
-  let answer = openAi.data.choices[0].text;
-}
-);
+});
 
 /* router.get("/app/:appId/:results", (req, res, next) => {
     const { appId, results } = req.params;
