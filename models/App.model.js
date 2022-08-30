@@ -12,6 +12,7 @@ const appSchema = new Schema(
         },
         prompt: { type: String },
         answer: [String], 
+        question: [String]
     },
     {
         timestamps: true,
