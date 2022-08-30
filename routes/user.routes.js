@@ -1,5 +1,17 @@
 const router = require("express").Router();
 const User = require("../models/User.model");
+const express = require("express");
+const fileUploader = require("../config/cloudinary.config");
+
+router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
+  if (!req.file) {
+    next(new Error("No file uploaded!"));
+    return;
+  }
+  res.json({ fileUrl: req.file.path });
+});
+
+//GET PROFILE
 
 router.get("/profile/:id", (req, res, next) => {
   const { id } = req.params;
@@ -10,6 +22,8 @@ router.get("/profile/:id", (req, res, next) => {
     .catch((err) => res.json(err));
 });
 
+// PUT EDIT PROFILE
+
 router.put("/editprofile/:id", (req, res, next) => {
   const { id } = req.params;
   const { name, email, field } = req.body;
@@ -18,6 +32,8 @@ router.put("/editprofile/:id", (req, res, next) => {
     .then((response) => res.status(200).json(response))
     .catch((err) => res.json(err));
 });
+
+// DELETE PROFILE
 
 router.delete('/profile/:id', (req, res, next) => {
   const { id } = req.params;

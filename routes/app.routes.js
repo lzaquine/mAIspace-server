@@ -62,6 +62,12 @@ router.post("/app/:appName", async (req, res, next) => {
     );
     let answer = (openAi.data.choices[0].text)
     res.json(answer);
+
+    await App.findOneAndUpdate(
+      appName, 
+      { $push: { answer: answer } },
+      )
+      
     console.log(answer);
   } catch (error) {
     console.log(error);

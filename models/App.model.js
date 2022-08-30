@@ -11,7 +11,7 @@ const appSchema = new Schema(
             type: Number,
         },
         prompt: { type: String },
-        answer: [String],
+        answer: [String], 
     },
     {
         timestamps: true,
