@@ -2,6 +2,8 @@ const router = require("express").Router();
 const App = require("../models/App.model");
 const axios = require("axios");
 const User = require("../models/User.model");
+const Result = require("../models/Result.model")
+const { isAuthenticated } = require("../middleware/jwt.middleware");
 
 
 // ALL APPS
@@ -36,9 +38,10 @@ router.get("/app/:appName", (req, res, next) => {
 
 // CALL API
 
-router.post("/app/:appName", async (req, res, next) => {
+router.post("/app/:appName", isAuthenticated, async (req, res, next) => {
   const { appName } = req.params;
   const { question } = req.body;
+  const user = req.payload;
 
   let app = await App.findOne({ appName });
 
@@ -52,7 +55,7 @@ router.post("/app/:appName", async (req, res, next) => {
       max_tokens: app.max_tokens,
     };
     
-    console.log(question);
+
     let openAi = await axios.post(
       `https://api.openai.com/v1/engines/text-davinci-002/completions`,
       body,
@@ -63,54 +66,24 @@ router.post("/app/:appName", async (req, res, next) => {
     let answer = (openAi.data.choices[0].text)
     res.json(answer);
 
-    await App.findOneAndUpdate( appName, { $push: { question: question } });
+    const createdResults = await Result.create({answer: answer, question: question, app: app._id})
 
-    await App.findOneAndUpdate(
-      appName, 
-      { $push: { answer: answer } },
-      )
-      
-    console.log(answer);
+    const newResult = await Result.findById(createdResults._id)
+    await User.findByIdAndUpdate(
+      user._id,
+      {
+        $push: {
+          results: 
+            newResult._id,
+
+        },
+      },
+      { new: true }
+    );
   } catch (error) {
     console.log(error);
   }
 });
 
-/* router.get("/app/:appId/:results", (req, res, next) => {
-    const { appId, results } = req.params;
-    
-    Result.findById(appId, results)
-        .then((app) => res.status(200).json(app))
-        .catch((err) => res.json(err));
-});
-
-router.post("/app/:appId/:results", (req, res, next) => {
-    const { appId, results } = req.params;
-    const { userInput, results: result } = req.body;
-
-    Result.create({ userInput, results: result })
-        .then((app) => res.status(200).json(app))
-        .catch((err) => res.json(err));
-
-    App.findById(appId, { $push: { results: { userInput, result } } })
-        .then((app) => res.status(200).json(app))
-        .catch((err) => res.json(err));
-
-    User.findByIdAndUpdate(result, { $push: { results: { userInput, result } } })
-        .then((user) => res.status(200).json(user))
-        .catch((err) => res.json(err));
-
-}) */
-
 module.exports = router;
 
-/* App.findOne(appName)
-        .then((app) => {
-        app.results.push({ userInput, result });
-        app.save()
-        .then((app) => res.status(200).json(app))
-        }).catch((err) => res.json(err));
-    
-    Result.create({userInput, appName, result})
-        .then((app) => res.status(200).json(app))
-        .catch((err) => res.json(err)); */

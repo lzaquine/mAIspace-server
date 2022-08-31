@@ -1,10 +1,10 @@
-/* const { Schema, model } = require('mongoose');
+const { Schema, model } = require('mongoose');
 
 const resultsSchema = new Schema(
     {
-        userInput: { type: String },
-        results: { type: String },
-        appName: { type: String },
+        answer: [String], 
+        question: [String],
+        app: { type: Schema.Types.ObjectId, ref: 'App' },
     },
     {
         timestamps: true,
@@ -13,4 +13,4 @@ const resultsSchema = new Schema(
 
 const Result = model('Result', resultsSchema);
 
-module.exports = Result; */
+module.exports = Result;

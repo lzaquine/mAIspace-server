@@ -16,6 +16,7 @@ router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
 router.get("/profile/:id", (req, res, next) => {
   const { id } = req.params;
   User.findById(id)
+  .populate("results")
     .then((user) => {
       res.status(200).json(user);
     })
