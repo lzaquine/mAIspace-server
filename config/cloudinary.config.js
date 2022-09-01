@@ -12,8 +12,8 @@ const storage = new CloudinaryStorage({
   cloudinary,
   params: {
     allowed_formats: ['jpg', 'png', 'jpeg'],
-    folder: 'ironhub-project',
-    //resource_type: 'raw'
+    folder: 'maispace',
+    resource_type: 'auto'
   },
 });
 
