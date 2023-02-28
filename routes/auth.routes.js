@@ -13,13 +13,8 @@ const User = require("../models/User.model");
 
 const { isAuthenticated } = require("../middleware/jwt.middleware");
 
-router.get("/verify", isAuthenticated, (req, res) => {
-
-  res.status(200).json(req.payload);
-});
-
 router.post("/signup", (req, res) => {
-  const { name, password, email, field } = req.body;
+  const { name, password, email } = req.body;
 
   if (!name) {
     return res
@@ -69,13 +64,14 @@ router.post("/signup", (req, res) => {
         return User.create({
           email,
           name,
-          field,
           password: hashedPassword,
         });
       })
-      .then((user) => {
+      .then((createdUser) => {
+        const {email, name, password} = createdUser
         // Bind the user to the session object
-        res.status(201).json(user);
+        const user = {email, name, password}
+        res.status(201).json({user: user});
       })
       .catch((error) => {
         if (error instanceof mongoose.Error.ValidationError) {
@@ -135,7 +131,7 @@ router.post("/login", (req, res, next) => {
         });
 
         return res.status(200).json({ authToken: authToken });
-      });
+      })
     })
 
     .catch((err) => {
@@ -144,6 +140,11 @@ router.post("/login", (req, res, next) => {
       next(err);
       // return res.status(500).render("login", { errorMessage: err.message });
     });
+});
+
+router.get("/verify", isAuthenticated, (req, res) => {
+  console.log(`req.payload`, req.payload);
+  res.status(200).json(req.payload);
 });
 
 module.exports = router;

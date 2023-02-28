@@ -7,17 +7,10 @@ router.get("/", (req, res, next) => {
   res.json("All good in here");
 });
 
+router.get("/about", (req, res, next) => {
+  res.json("All good in here");
+});
+
 router.use("/auth", authRoutes);
-
-/* router.post("/upload", fileUploader.single("fileUrl"), (req, res, next) => {
-
-
-  if (!req.file) {
-    next(new Error("No file uploaded!"));
-    return;
-  }
-
-  res.json({ fileUrl: req.file.path });
-}); */
 
 module.exports = router;
