@@ -1,0 +1,4 @@
+This is a Brave Rewards publisher verification file.
+
+Domain: maispace.netlify.app
+Token: a101e21ba70241e7668ff23fc17139acd7ca64c5d98266411248738ed8cb8a46
